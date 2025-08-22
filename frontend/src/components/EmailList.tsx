@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   List,
   ListItemText,
@@ -7,55 +7,31 @@ import {
   Box,
   Divider,
   Paper,
-} from "@mui/material";
+} from '@mui/material';
+import { Email } from '@/types/email';
+import { formatDate } from '@/utils/date';
+import { truncateText } from '@/utils/text';
 
-const formatDate = (dateString) => {
-  const date = new Date(dateString);
-  const today = new Date();
-  const yesterday = new Date(today);
-  yesterday.setDate(yesterday.getDate() - 1);
+interface EmailListProps {
+  emails: Email[];
+  selectedEmail: Email | null;
+  onSelectEmail: (email: Email) => void;
+}
 
-  if (date.toDateString() === today.toDateString()) {
-    return date.toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    });
-  } else if (date.toDateString() === yesterday.toDateString()) {
-    return "Yesterday";
-  } else if (date.getFullYear() === today.getFullYear()) {
-    return date.toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-    });
-  } else {
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-  }
-};
-
-const truncateText = (text, maxLength) => {
-  if (!text) return "";
-  return text.length > maxLength ? text.substring(0, maxLength) + "..." : text;
-};
-
-const EmailList = ({ emails, selectedEmail, onSelectEmail }) => {
+const EmailList: React.FC<EmailListProps> = ({ emails, selectedEmail, onSelectEmail }) => {
   return (
     <Paper
       elevation={0}
       sx={{
-        height: "100%",
+        height: '100%',
         borderRadius: 0,
-        borderRight: "1px solid",
-        borderColor: "divider",
-        bgcolor: "background.paper",
-        overflow: "auto",
+        borderRight: '1px solid',
+        borderColor: 'divider',
+        bgcolor: 'background.paper',
+        overflow: 'auto',
       }}
     >
-      <Box sx={{ p: 2, borderBottom: "1px solid", borderColor: "divider" }}>
+      <Box sx={{ p: 2, borderBottom: '1px solid', borderColor: 'divider' }}>
         <Typography variant="h6" sx={{ fontWeight: 600 }}>
           Inbox
         </Typography>
@@ -69,14 +45,14 @@ const EmailList = ({ emails, selectedEmail, onSelectEmail }) => {
               sx={{
                 py: 1.5,
                 px: 2,
-                "&.Mui-selected": {
-                  bgcolor: "action.selected",
-                  "&:hover": {
-                    bgcolor: "action.selected",
+                '&.Mui-selected': {
+                  bgcolor: 'action.selected',
+                  '&:hover': {
+                    bgcolor: 'action.selected',
                   },
                 },
-                "&:hover": {
-                  bgcolor: "action.hover",
+                '&:hover': {
+                  bgcolor: 'action.hover',
                 },
               }}
             >
@@ -84,16 +60,16 @@ const EmailList = ({ emails, selectedEmail, onSelectEmail }) => {
                 primary={
                   <Box
                     sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "flex-start",
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'flex-start',
                     }}
                   >
                     <Typography
                       variant="body2"
                       sx={{
                         fontWeight: selectedEmail?.id === email.id ? 600 : 500,
-                        color: "text.primary",
+                        color: 'text.primary',
                         mr: 1,
                       }}
                     >
@@ -102,7 +78,7 @@ const EmailList = ({ emails, selectedEmail, onSelectEmail }) => {
                     <Typography
                       variant="caption"
                       sx={{
-                        color: "text.secondary",
+                        color: 'text.secondary',
                         flexShrink: 0,
                       }}
                     >
@@ -116,18 +92,18 @@ const EmailList = ({ emails, selectedEmail, onSelectEmail }) => {
                       variant="body2"
                       sx={{
                         fontWeight: selectedEmail?.id === email.id ? 600 : 500,
-                        color: "text.primary",
-                        display: "block",
+                        color: 'text.primary',
+                        display: 'block',
                         mb: 0.5,
                       }}
                     >
-                      {truncateText(email.subject || "No Subject", 40)}
+                      {truncateText(email.subject || 'No Subject', 40)}
                     </Typography>
                     <Typography
                       variant="body2"
                       sx={{
-                        color: "text.secondary",
-                        display: "block",
+                        color: 'text.secondary',
+                        display: 'block',
                       }}
                     >
                       {truncateText(email.body, 60)}
@@ -141,7 +117,7 @@ const EmailList = ({ emails, selectedEmail, onSelectEmail }) => {
           </React.Fragment>
         ))}
         {emails.length === 0 && (
-          <Box sx={{ p: 3, textAlign: "center" }}>
+          <Box sx={{ p: 3, textAlign: 'center' }}>
             <Typography variant="body2" color="text.secondary">
               No emails yet
             </Typography>

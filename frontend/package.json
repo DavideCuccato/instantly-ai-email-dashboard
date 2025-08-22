@@ -6,21 +6,29 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "generate:api": "openapi-ts"
   },
   "dependencies": {
     "@ai-sdk/openai": "^2.0.19",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
+    "@hey-api/client-axios": "^0.9.1",
+    "@hey-api/openapi-ts": "^0.80.18",
     "@mui/icons-material": "^5.15.16",
     "@mui/material": "^5.15.16",
+    "@types/node": "^24.3.0",
+    "@types/react": "^19.1.10",
+    "@types/react-dom": "^19.1.7",
     "ai": "^5.0.21",
     "axios": "^1.11.0",
     "next": "14.2.3",
     "openai": "^5.15.0",
     "react": "^18",
     "react-dom": "^18",
-    "zod": "^3.25.76"
+    "typescript": "^5.9.2",
+    "zod": "^4.0.17",
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "eslint": "^8",

@@ -18,9 +18,16 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import SendIcon from '@mui/icons-material/Send';
+import { CreateEmailDto, AiGenerateResponse } from '@/types/email';
 
-const ComposeEmail = ({ open, onClose, onSend }) => {
-  const [emailData, setEmailData] = useState({
+interface ComposeEmailProps {
+  open: boolean;
+  onClose: () => void;
+  onSend: (emailData: CreateEmailDto) => Promise<void>;
+}
+
+const ComposeEmail: React.FC<ComposeEmailProps> = ({ open, onClose, onSend }) => {
+  const [emailData, setEmailData] = useState<CreateEmailDto>({
     to: '',
     cc: '',
     bcc: '',
@@ -30,12 +37,12 @@ const ComposeEmail = ({ open, onClose, onSend }) => {
   
   const [aiPrompt, setAiPrompt] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [assistantType, setAssistantType] = useState(null);
-  const [wordCount, setWordCount] = useState(null);
-  const [error, setError] = useState(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [assistantType, setAssistantType] = useState<'sales' | 'followup' | null>(null);
+  const [wordCount, setWordCount] = useState<number | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleInputChange = (field) => (event) => {
+  const handleInputChange = (field: keyof CreateEmailDto) => (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmailData({ ...emailData, [field]: event.target.value });
   };
 
@@ -64,7 +71,7 @@ const ComposeEmail = ({ open, onClose, onSend }) => {
     onClose();
   };
 
-  const handleAiClick = (event) => {
+  const handleAiClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -97,7 +104,9 @@ const ComposeEmail = ({ open, onClose, onSend }) => {
         throw new Error(errorData.error || 'Generation failed');
       }
       
-      const reader = response.body.getReader();
+      const reader = response.body?.getReader();
+      if (!reader) throw new Error('No response body');
+      
       const decoder = new TextDecoder();
       
       while (true) {
@@ -113,7 +122,7 @@ const ComposeEmail = ({ open, onClose, onSend }) => {
             if (dataStr === '[DONE]') continue;
             
             try {
-              const data = JSON.parse(dataStr);
+              const data: AiGenerateResponse = JSON.parse(dataStr);
               
               if (data.error) {
                 throw new Error(data.error);
@@ -128,14 +137,14 @@ const ComposeEmail = ({ open, onClose, onSend }) => {
               }
               
               if ((data.type === 'subject' || data.type === 'final') && data.subject !== undefined) {
-                setEmailData(prev => ({ ...prev, subject: data.subject }));
+                setEmailData(prev => ({ ...prev, subject: data.subject! }));
               }
               
               if ((data.type === 'body' || data.type === 'final') && data.body !== undefined) {
-                setEmailData(prev => ({ ...prev, body: data.body }));
+                setEmailData(prev => ({ ...prev, body: data.body! }));
               }
             } catch (e) {
-              if (e.message && e.message !== 'Unexpected end of JSON input') {
+              if (e instanceof Error && e.message && e.message !== 'Unexpected end of JSON input') {
                 console.error('Parse error:', e);
               }
             }
@@ -144,7 +153,7 @@ const ComposeEmail = ({ open, onClose, onSend }) => {
       }
     } catch (error) {
       console.error('AI generation error:', error);
-      setError(error.message || 'Failed to generate email');
+      setError(error instanceof Error ? error.message : 'Failed to generate email');
     } finally {
       setIsGenerating(false);
       setAiPrompt('');
