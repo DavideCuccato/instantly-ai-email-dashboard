@@ -1,5 +1,4 @@
-For "quick" version, look at https://github.com/DavideCuccato/instantly-ai-email-dashboard
-This is the "improved v2" version done in less than 60 minutes, but after the completion of the standard one.
+# For "quick" version, look at https://github.com/DavideCuccato/instantly-ai-email-dashboard . This is the "improved v2" version done in less than 60 minutes, but after the completion of the standard one.
 
 # Instantly.AI Coding Assignment for AI Engineers
 
