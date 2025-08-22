@@ -1,3 +1,6 @@
+# For improved version, look at https://github.com/DavideCuccato/instantly-ai-email-dashboard/tree/v2
+# This is the "quick" version done in less than 60 minutes
+
 # Instantly.AI Coding Assignment for AI Engineers
 
 # Assignment:
